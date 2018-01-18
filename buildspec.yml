@@ -35,12 +35,12 @@ phases:
 
       # Build our go application
       - go build -o main main.go && zip main.zip main
-#      - go build -o hi hi.go && zip hi.zip hi
+      - go build -o hi hi.go && zip hi.zip hi
 
       # Copy static assets to S3, and package application with AWS CloudFormation/SAM
       - aws s3 cp --recursive public/ s3://$WEBSITE_S3_BUCKET/public/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - aws s3 cp main.zip s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-#      - aws s3 cp hi.zip s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      - aws s3 cp hi.zip s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
       - sed -i -e "s|assets/|$WEBSITE_S3_PREFIX/public/assets/|g" public/index.html
       - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
 
