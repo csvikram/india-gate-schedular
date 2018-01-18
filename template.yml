@@ -22,7 +22,7 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /hello
+            Path: /
             Method: get
   PostHi:
     Type: AWS::Serverless::Function
@@ -52,5 +52,5 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /hello
             Method: get
