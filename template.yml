@@ -14,6 +14,7 @@ Resources:
     Properties:
       Handler: main
       Runtime: go1.x
+      CodeUri: s://aws-codestar-us-east-1-709325198486-india-gate-sche-app/main.zip
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
@@ -23,3 +24,18 @@ Resources:
           Properties:
             Path: /
             Method: get
+#  PostHi:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      Handler: hi
+#      Runtime: go1.x
+#      CodeUri: s://aws-codestar-us-east-1-709325198486-india-gate-sche-app/hi.zip
+#      Role:
+#        Fn::ImportValue:
+#          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+#      Events:
+#        GetEvent:
+#          Type: Api
+#          Properties:
+#            Path: /
+#            Method: post
