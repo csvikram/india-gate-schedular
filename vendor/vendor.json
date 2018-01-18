@@ -1,0 +1,31 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "UdA3yfjb49/XLNnInMOxm+S7dYU=",
+			"path": "github.com/aws/aws-lambda-go/events",
+			"revision": "6e2e37798efbb1dfd8e9c6681702e683a6046517",
+			"revisionTime": "2018-01-16T20:39:22Z"
+		},
+		{
+			"checksumSHA1": "Cp5g14Nb4FHDiCiw92305tsyK+8=",
+			"path": "github.com/aws/aws-lambda-go/lambda",
+			"revision": "6e2e37798efbb1dfd8e9c6681702e683a6046517",
+			"revisionTime": "2018-01-16T20:39:22Z"
+		},
+		{
+			"checksumSHA1": "FEIW+8VDruQZu0Cv9j7r+Km8r8o=",
+			"path": "github.com/aws/aws-lambda-go/lambda/messages",
+			"revision": "6e2e37798efbb1dfd8e9c6681702e683a6046517",
+			"revisionTime": "2018-01-16T20:39:22Z"
+		},
+		{
+			"checksumSHA1": "+3R+gHl3aC1ZBNfg0dEVBv1roaQ=",
+			"path": "github.com/aws/aws-lambda-go/lambdacontext",
+			"revision": "6e2e37798efbb1dfd8e9c6681702e683a6046517",
+			"revisionTime": "2018-01-16T20:39:22Z"
+		}
+	],
+	"rootPath": "github.com/csvikram/india-gate-schedular"
+}
