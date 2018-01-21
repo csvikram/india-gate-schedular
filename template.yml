@@ -14,7 +14,6 @@ Resources:
     Properties:
       Handler: main
       Runtime: go1.x
-#      CodeUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/main.zip
       Description: Creates thumbnails of uploaded images
       Role:
         Fn::ImportValue:
@@ -25,14 +24,13 @@ Resources:
           Properties:
             Path: /
             Method: get
-#            StageName: beta
+            StageName: Stage
 
   PostHi:
     Type: AWS::Serverless::Function
     Properties:
       Handler: hi
       Runtime: go1.x
-#      CodeUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/hi.zip
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
@@ -42,14 +40,13 @@ Resources:
           Properties:
             Path: /
             Method: post
-#            StageName: beta
+            StageName: Stage
 
   GetHello:
     Type: AWS::Serverless::Function
     Properties:
       Handler: hello
       Runtime: go1.x
-#      CodeUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/hello.zip
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
