@@ -1,0 +1,27 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "awscodestar-india-gate-sche-lambda"
+  },
+  "host": "pnj1zkt6n0.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/Stage",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "responses": {}
+      },
+      "post": {
+        "responses": {}
+      }
+    },
+    "/hello": {
+      "get": {
+        "responses": {}
+      }
+    }
+  }
+}

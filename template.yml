@@ -62,3 +62,4 @@ Resources:
     Properties:
       Name: awscodestar-india-gate-sche-lambda
       StageName: Stage
+      DefinitionUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/stage-swagger.json
