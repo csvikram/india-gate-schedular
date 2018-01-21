@@ -14,7 +14,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string("this is main"),
+		Body:       string("this is main, test 3"),
 		Headers: map[string]string{
 			"Content-Type": "text/plain",
 		},
