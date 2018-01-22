@@ -1,17 +1,21 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"encoding/json"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"os"
 )
+
+const TableName = "TABLE_NAME"
 
 func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	tableName := os.Getenv(TableName)
 	region := "us-east-1"
 	//session
 	awsSession := session.Must(session.NewSession(&aws.Config{
@@ -45,7 +49,7 @@ func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayPr
 
 	}
 	putItemInput := &dynamodb.PutItemInput{
-		TableName: aws.String("test_lambda"),
+		TableName: aws.String(tableName),
 		Item:      dynamoItem,
 	}
 
@@ -62,7 +66,7 @@ func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayPr
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       "this is main, test 3",
+		Body:       "SuccessFully insert data",
 		Headers: map[string]string{
 			"Content-Type": "text/plain",
 		},

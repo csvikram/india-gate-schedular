@@ -63,12 +63,31 @@ Resources:
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Environment:
+        Variables:
+          TABLE_NAME: india-gate-event
+      Policies:
+        - AmazonDynamoDBFullAccess
       Events:
         GetEvent:
           Type: Api
           Properties:
             Path: /insert
             Method: post
+
+  DynamoDBTable:
+       Type: AWS::DynamoDB::Table
+       Properties:
+         TableName: india-gate-event
+         AttributeDefinitions:
+           - AttributeName: eventID
+             AttributeType: S
+         KeySchema:
+           - AttributeName: eventID
+             KeyType: HASH
+         ProvisionedThroughput:
+           ReadCapacityUnits: 5
+           WriteCapacityUnits: 5
 #  APIGateway:
 #    Type: AWS::Serverless::Api
 #    Properties:
