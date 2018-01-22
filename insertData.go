@@ -11,11 +11,11 @@ import (
 	"os"
 )
 
-const TableName = "TABLE_NAME"
+const TableNameInsertData = "TABLE_NAME"
 
 func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	tableName := os.Getenv(TableName)
+	tableName := os.Getenv(TableNameInsertData)
 	region := "us-east-1"
 	//session
 	awsSession := session.Must(session.NewSession(&aws.Config{

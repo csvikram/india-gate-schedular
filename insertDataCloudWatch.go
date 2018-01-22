@@ -12,10 +12,12 @@ import (
 	"time"
 )
 
+const TableNameInsertDataCloudWatch = "TABLE_NAME"
+
 func insertEventInDBCloudWatch(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	region := "us-east-1"
-	tableName := os.Getenv(TableName)
+	tableName := os.Getenv(TableNameInsertDataCloudWatch)
 	awsSession := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	}))
