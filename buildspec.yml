@@ -9,7 +9,8 @@ phases:
       # application source code into that directory structure.
       - go version
       - mkdir -p "/go/src/github.com/csvikram/india-gate-schedular"
-      - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/github.com/csvikram/india-gate-schedular"
+      - cp -r $CODEBUILD_SRC_DIR/* /go/src/github.com/csvikram/india-gate-schedular
+#      - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/github.com/csvikram/india-gate-schedular"
 
       # Install golint
 #      - go get -u github.com/golang/lint/golint
