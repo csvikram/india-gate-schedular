@@ -16,8 +16,10 @@ func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayPr
 	awsSession := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	}))
+
 	dbClient := &awsDynamo.Client{Client: dynamodb.New(awsSession)}
 	var body map[string]interface{}
+
 	if err := json.Unmarshal([]byte(request.Body),&body); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
