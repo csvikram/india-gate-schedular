@@ -120,7 +120,7 @@ Resources:
         -
           Arn:
             Fn::GetAtt:
-              - "LambdaFunction"
+              - "InsertDataCloudWatch"
               - "Arn"
           Id: "InsertDataCloudWatch"
 
