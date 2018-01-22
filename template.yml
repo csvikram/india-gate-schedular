@@ -75,6 +75,26 @@ Resources:
             Path: /insert
             Method: post
 
+  InsertDataCloudWatch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: insertDataCloudWatch
+      Runtime: go1.x
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Environment:
+        Variables:
+          TABLE_NAME: india-gate-event
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /insertRate
+            Method: post
+
   DynamoDBTable:
        Type: AWS::DynamoDB::Table
        Properties:
@@ -88,6 +108,33 @@ Resources:
          ProvisionedThroughput:
            ReadCapacityUnits: 5
            WriteCapacityUnits: 5
+
+  ScheduledRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Name: "Scheduler"
+      Description: "ScheduledRule"
+      ScheduleExpression: "rate(1 minutes)"
+      State: "ENABLED"
+      Targets:
+        -
+          Arn:
+            Fn::GetAtt:
+              - "LambdaFunction"
+              - "Arn"
+          Id: "InsertDataCloudWatch"
+
+  PermissionForEventsToInvokeLambda:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName:
+        Ref: "LambdaFunction"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "ScheduledRule"
+          - "Arn"
 #  APIGateway:
 #    Type: AWS::Serverless::Api
 #    Properties:
