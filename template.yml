@@ -24,7 +24,6 @@ Resources:
           Properties:
             Path: /
             Method: get
-#            StageName: Stage
 
   PostHi:
     Type: AWS::Serverless::Function
@@ -40,7 +39,6 @@ Resources:
           Properties:
             Path: /
             Method: post
-#            StageName: Stage
 
   GetHello:
     Type: AWS::Serverless::Function
@@ -56,10 +54,24 @@ Resources:
           Properties:
             Path: /hello
             Method: get
-#            StageName: beta
-  APIGateway:
-    Type: AWS::Serverless::Api
+
+  InsertData:
+    Type: AWS::Serverless::Function
     Properties:
-      Name: india-gate-schedular
-      StageName: Stage
-      DefinitionUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/stage-swagger.json
+      Handler: insertData
+      Runtime: go1.x
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /insert
+            Method: post
+#  APIGateway:
+#    Type: AWS::Serverless::Api
+#    Properties:
+#      Name: india-gate-schedular
+#      StageName: Stage
+#      DefinitionUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/stage-swagger.json
