@@ -6,21 +6,24 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/csvikram/india-gate-schedular/services/awsDynamo"
 	"encoding/json"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	region := "us-east-1"
+	//session
 	awsSession := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	}))
 
-	dbClient := &awsDynamo.Client{Client: dynamodb.New(awsSession)}
+	//database client
+	dbClient := dynamodb.New(awsSession)
+
 	var body map[string]interface{}
 
-	if err := json.Unmarshal([]byte(request.Body),&body); err != nil {
+	if err := json.Unmarshal([]byte(request.Body), &body); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       string("Something went wrong"),
@@ -29,11 +32,37 @@ func insertEventInDB(request events.APIGatewayProxyRequest) (events.APIGatewayPr
 			},
 		}, nil
 	}
-	dbClient.InsertItem("test_lambda",body)
+
+	dynamoItem, err := dynamodbattribute.MarshalMap(&body)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "Something went wrong" + err.Error(),
+			Headers: map[string]string{
+				"Content-Type": "text/plain",
+			},
+		}, nil
+
+	}
+	putItemInput := &dynamodb.PutItemInput{
+		TableName: aws.String("test_lambda"),
+		Item:      dynamoItem,
+	}
+
+	_, err = dbClient.PutItem(putItemInput)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "Something went wrong" + err.Error(),
+			Headers: map[string]string{
+				"Content-Type": "text/plain",
+			},
+		}, nil
+	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string("this is main, test 3"),
+		Body:       "this is main, test 3",
 		Headers: map[string]string{
 			"Content-Type": "text/plain",
 		},

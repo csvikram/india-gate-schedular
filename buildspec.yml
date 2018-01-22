@@ -7,10 +7,7 @@ phases:
 
       # AWS Codebuild Go images use /go for the $GOPATH so let's symlink our 
       # application source code into that directory structure.
-      - go version
-      - mkdir -p "/go/src/github.com/csvikram/india-gate-schedular"
-      - cp -r $CODEBUILD_SRC_DIR/* /go/src/github.com/csvikram/india-gate-schedular
-#      - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/github.com/csvikram/india-gate-schedular"
+      - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/main"
 
       # Install golint
 #      - go get -u github.com/golang/lint/golint
@@ -19,7 +16,7 @@ phases:
     commands:
 
       # Make sure we're in the project directory within our GOPATH
-      - cd "/go/src/github.com/csvikram/india-gate-schedular"
+      - cd "/go/src/main"
 
       # Fetch all dependencies
 #      - go get ./...
@@ -37,8 +34,6 @@ phases:
     commands:
 
       # Build our go application
-      - pwd
-      - ls
       - go build -o main main.go
       - go build -o hi hi.go
       - go build -o hello hello.go
@@ -50,7 +45,7 @@ phases:
 #      - aws s3 cp main.zip s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 #      - aws s3 cp hi.zip s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 #      - aws s3 cp hello.zip s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-#      - aws s3 cp *.json s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+      - aws s3 cp *.json s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
       - sed -i -e "s|assets/|$WEBSITE_S3_PREFIX/public/assets/|g" public/index.html
       - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
