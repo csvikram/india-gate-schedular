@@ -36,6 +36,8 @@ phases:
     commands:
 
       # Build our go application
+      - pwd
+      - ls
       - go build -o main main.go
       - go build -o hi hi.go
       - go build -o hello hello.go
