@@ -111,23 +111,23 @@ Resources:
       ScheduleExpression: "rate(1 minute)"
       State: "ENABLED"
       Targets:
-        -
-          Arn:
+        - Arn:
             Fn::GetAtt:
               - "InsertDataCloudWatch"
               - "Arn"
           Id: "InsertDataCloudWatch"
+#          RoleArn: ""
 
-  PermissionForEventsToInvokeLambda:
-    Type: "AWS::Lambda::Permission"
-    Properties:
-      FunctionName: "InsertDataCloudWatch"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "ScheduledRule"
-          - "Arn"
+#  PermissionForEventsToInvokeLambda:
+#    Type: "AWS::Lambda::Permission"
+#    Properties:
+#      FunctionName: "InsertDataCloudWatch"
+#      Action: "lambda:InvokeFunction"
+#      Principal: "events.amazonaws.com"
+#      SourceArn:
+#        Fn::GetAtt:
+#          - "ScheduledRule"
+#          - "Arn"
 #  APIGateway:
 #    Type: AWS::Serverless::Api
 #    Properties:
