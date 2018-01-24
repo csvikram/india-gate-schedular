@@ -41,6 +41,7 @@ func insertEventInDBCloudWatch(request string)  error{
 		log.Println(err.Error())
 	}
 	log.Println("Done")
+	return nil
 }
 
 func main() {
