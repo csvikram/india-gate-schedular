@@ -88,6 +88,12 @@ Resources:
           TABLE_NAME: india-gate-event
       Policies:
         - AmazonDynamoDBFullAccess
+      Events:
+        PostEvent:
+          Type: Api
+          Properties:
+            Path: /insertcw
+            Method: post
 
   DynamoDBTable:
        Type: AWS::DynamoDB::Table
