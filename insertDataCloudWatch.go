@@ -13,9 +13,9 @@ import (
 
 const TableNameInsertDataCloudWatch = "TABLE_NAME"
 
-func insertEventInDBCloudWatch(request string)  error{
+func insertEventInDBCloudWatch(request map[string]interface{})  error{
 
-	log.Println("Running inserEventINDB" + request)
+	log.Println("Running inserEventINDB",request)
 	region := "us-east-1"
 	tableName := os.Getenv(TableNameInsertDataCloudWatch)
 	awsSession := session.Must(session.NewSession(&aws.Config{
@@ -45,5 +45,6 @@ func insertEventInDBCloudWatch(request string)  error{
 }
 
 func main() {
+	log.Println("Running inserEventINDB")
 	lambda.Start(insertEventInDBCloudWatch)
 }
