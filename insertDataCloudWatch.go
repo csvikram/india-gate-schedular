@@ -36,7 +36,7 @@ func insertEventInDBCloudWatch(request events.APIGatewayProxyRequest) (events.AP
 			},
 		}, nil
 	}
-	body["eventID"] = string(time.Nanosecond)
+	body["eventID"] = time.Now().String()
 
 	dynamoItem, err := dynamodbattribute.MarshalMap(&body)
 	if err != nil {
