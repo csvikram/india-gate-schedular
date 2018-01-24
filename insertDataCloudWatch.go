@@ -25,7 +25,7 @@ func insertEventInDBCloudWatch(request map[string]interface{})  error{
 	//database client
 	dbClient := dynamodb.New(awsSession)
 
-	var body map[string]interface{}
+	var body = map[string]interface{}{}
 
 	body["eventID"] = time.Now().String()
 
