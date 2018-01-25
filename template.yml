@@ -89,19 +89,6 @@ Resources:
           TABLE_NAME: india-gate-event
       Policies:
         - AmazonDynamoDBFullAccess
-#      Events:
-#        PostEvent:
-#          Type: CloudWatchEvent
-#          Properties:
-#            Pattern:
-#              source: aws.events
-#              resources:
-#                Fn::GetAtt:
-#                  - "InsertDataCloudWatch"
-#                  - "Arn"
-#              detail:
-#                state:
-#                  - terminated
 
   DynamoDBTable:
        Type: AWS::DynamoDB::Table
@@ -143,9 +130,16 @@ Resources:
           - "ScheduledRule"
           - "Arn"
 
+  CodePipelineSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: vikram.choudhary@payu.in
+          Protocol: email
+
 #  APIGateway:
 #    Type: AWS::Serverless::Api
 #    Properties:
 #      Name: india-gate-schedular
-#      StageName: Stage
+#      StageName: Stage1
 #      DefinitionUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/stage-swagger.json
