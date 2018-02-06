@@ -23,122 +23,66 @@ Resources:
           Properties:
             Path: /
             Method: get
-###############3
-  PostHi:
+  TaskQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 60
+      RedrivePolicy:
+        deadLetterTargetArn: !Sub ${DeadLetterQueue.Arn}
+        maxReceiveCount: 10
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
+  ConsumerLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: '/'
+      Policies:
+      - PolicyName: logs
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+      - PolicyName: sqs
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+            - sqs:ReceiveMessage
+            Resource: !Sub ${TaskQueue.Arn}
+      #- PolicyName: lambda
+        #PolicyDocument:
+          #Statement:
+          #- Effect: Allow
+            #Action:
+            #- lambda:InvokeFunction
+            #Resource: !Sub ${WorkerLambda.Arn}
+  ConsumerLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: hi
+      CodeUri: ./consumer
+      Handler: consumerLambda
+      MemorySize: 128
+      Role: !Sub ${ConsumerLambdaRole.Arn}
       Runtime: go1.x
-      Role:
-        Fn::ImportValue:
-          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
-      Events:
-        GetEvent:
-          Type: Api
-          Properties:
-            Path: /
-            Method: post
-
-  GetHello:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: hello
-      Runtime: go1.x
-      Role:
-        Fn::ImportValue:
-          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
-      Events:
-        GetEvent:
-          Type: Api
-          Properties:
-            Path: /hello
-            Method: get
-
-  InsertData:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: insertData
-      Runtime: go1.x
-      Role:
-        Fn::ImportValue:
-          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Timeout: 60
       Environment:
         Variables:
-          TABLE_NAME: india-gate-event
-      Policies:
-        - AmazonDynamoDBFullAccess
+          TASK_QUEUE_URL: !Ref TaskQueue
+          #WORKER_LAMBDA_NAME: !Ref WorkerLambda
       Events:
-        GetEvent:
-          Type: Api
+        Timer:
+          Type: Schedule
           Properties:
-            Path: /insert
-            Method: post
-
-  InsertDataCloudWatch:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: InsertDataCloudWatch
-      Handler: insertDataCloudWatch
-      Runtime: go1.x
-      Role:
-        Fn::ImportValue:
-          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
-      Environment:
-        Variables:
-          TABLE_NAME: india-gate-event
-      Policies:
-        - AmazonDynamoDBFullAccess
-
-  DynamoDBTable:
-       Type: AWS::DynamoDB::Table
-       Properties:
-         TableName: india-gate-event
-         AttributeDefinitions:
-           - AttributeName: eventID
-             AttributeType: S
-         KeySchema:
-           - AttributeName: eventID
-             KeyType: HASH
-         ProvisionedThroughput:
-           ReadCapacityUnits: 5
-           WriteCapacityUnits: 5
-
-  ScheduledRule:
-    Type: "AWS::Events::Rule"
-    Properties:
-      Name: "Scheduler"
-      Description: "ScheduledRule"
-      ScheduleExpression: "cron(1 * * * ? *)"
-      State: "ENABLED"
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - "InsertDataCloudWatch"
-              - "Arn"
-          Id: "InsertDataCloudWatch"
-#          RoleArn: ""
-
-  PermissionForEventsToInvokeLambda:
-    Type: "AWS::Lambda::Permission"
-    Properties:
-      FunctionName: "InsertDataCloudWatch"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "ScheduledRule"
-          - "Arn"
-
-  CodePipelineSNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      Subscription:
-        - Endpoint: vikram.choudhary@payu.in
-          Protocol: email
-
-#  APIGateway:
-#    Type: AWS::Serverless::Api
-#    Properties:
-#      Name: india-gate-schedular
-#      StageName: Stage1
-#      DefinitionUri: s3://aws-codestar-us-east-1-709325198486-india-gate-sche-app/stage-swagger.json
+            Schedule: rate(1 minute)
