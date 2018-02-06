@@ -16,7 +16,7 @@ var max_no_messages int64 = 10
 
 func handleWormHoleMessages(context map[string]interface{}) {
 
-	// receive messages
+	// receive messages from worm hole
 	log.Print("Consuming from worm hole")
 	region := "us-east-1"
 
