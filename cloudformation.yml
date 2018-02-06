@@ -37,16 +37,16 @@ Resources:
         PolicyDocument: 
           Statement: 
           - Effect: Allow
-            Action: 
+            Action:
             - sqs:ReceiveMessage
             Resource: !Sub ${TaskQueue.Arn}
-      - PolicyName: lambda
-        PolicyDocument: 
-          Statement: 
-          - Effect: Allow
-            Action: 
-            - lambda:InvokeFunction
-            Resource: !Sub ${WorkerLambda.Arn}
+      #- PolicyName: lambda
+        #PolicyDocument:
+          #Statement:
+          #- Effect: Allow
+            #Action:
+            #- lambda:InvokeFunction
+            #Resource: !Sub ${WorkerLambda.Arn}
   ConsumerLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -59,7 +59,7 @@ Resources:
       Environment:
         Variables:
           TASK_QUEUE_URL: !Ref TaskQueue
-          WORKER_LAMBDA_NAME: !Ref WorkerLambda
+          #WORKER_LAMBDA_NAME: !Ref WorkerLambda
       Events:
         Timer:
           Type: Schedule
