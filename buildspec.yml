@@ -34,7 +34,7 @@ phases:
     commands:
 
       # Build our go application
-      #- go build -o main main.go
+      - go build -o main main.go
       #- go build -o hi hi.go
       #- go build -o hello hello.go
       #- go build -o insertData insertData.go
