@@ -13,7 +13,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main
-      Runtime: go1.x
       Description: Creates thumbnails of uploaded images
       Role:
         Fn::ImportValue:
@@ -24,7 +23,7 @@ Resources:
           Properties:
             Path: /
             Method: get
-
+###############3
   PostHi:
     Type: AWS::Serverless::Function
     Properties:

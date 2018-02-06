@@ -183,6 +183,12 @@
 			"revisionTime": "2017-12-21T00:41:45Z"
 		},
 		{
+			"checksumSHA1": "XmEJe50M8MddNEkwbZoC+YvRjgg=",
+			"path": "github.com/aws/aws-sdk-go/service/sqs",
+			"revision": "f36920a0f7a246abe598d73b37b245199aabd3ad",
+			"revisionTime": "2018-02-06T00:49:27Z"
+		},
+		{
 			"checksumSHA1": "W1oFtpaT4TWIIJrAvFcn/XdcT7g=",
 			"path": "github.com/aws/aws-sdk-go/service/sts",
 			"revision": "afe97f91ead47c4a10f1e816c5a1cc8967fb70f9",

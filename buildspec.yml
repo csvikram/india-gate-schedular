@@ -34,11 +34,12 @@ phases:
     commands:
 
       # Build our go application
-      - go build -o main main.go
-      - go build -o hi hi.go
-      - go build -o hello hello.go
-      - go build -o insertData insertData.go
-      - go build -o insertDataCloudWatch insertDataCloudWatch.go
+      #- go build -o main main.go
+      #- go build -o hi hi.go
+      #- go build -o hello hello.go
+      #- go build -o insertData insertData.go
+      #- go build -o insertDataCloudWatch insertDataCloudWatch.go
+      - go build -o consumerLambda consumer/consumerLambda.go
 
       # Copy static assets to S3, and package application with AWS CloudFormation/SAM
       - aws s3 cp --recursive public/ s3://$WEBSITE_S3_BUCKET/public/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
@@ -49,7 +50,7 @@ phases:
       - aws s3 cp *.json s3://$WEBSITE_S3_BUCKET/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
       - sed -i -e "s|assets/|$WEBSITE_S3_PREFIX/public/assets/|g" public/index.html
-      - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+      - aws cloudformation package --template cloudformation.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
 
 artifacts:
   type: zip
